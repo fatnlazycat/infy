@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/favourites_view_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="130dp"
+    android:longClickable="false" >
+    
+    <ImageView
+        android:id="@+id/star_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="a"
+        android:src="@drawable/btn_rating_star_off_disabled_focused_holo_dark" />
+    
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_menu_moreoverflow_normal_holo_light"
+        android:onClick="showFavouritesContextMenu" />
+
+    <TextView
+        android:id="@+id/favourites_name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+		android:layout_above="@+id/favourites_im"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/favourites_im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Description" 
+        android:textSize="8sp" />
+
+
+</RelativeLayout>

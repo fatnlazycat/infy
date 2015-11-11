@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/start_activity_background"
+    android:gravity="start"
+    android:orientation="vertical"
+    tools:context=".StartActivity" >
+
+    <EditText
+        android:id="@+id/editTextEmailAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editTextPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/Email_address"
+        android:inputType="textEmailAddress"
+        android:gravity="center_horizontal"
+        android:text="a@b.com"
+        android:textColor="#ffebee" />
+
+    <Button
+        android:id="@+id/button_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="29dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/sign_in" />
+
+    <Button
+        android:id="@+id/buttonLogIn"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_register"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="29dp"
+        android:background="@drawable/login_button_style"
+        android:onClick="gotoMainActivity"
+        android:text="@string/log_in"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/justLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/just_line" />
+
+    <ImageView
+        android:id="@+id/justLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonLogIn"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/just_line" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonLogIn"
+        android:layout_marginBottom="26dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="textPassword"
+        android:text="qwerty" />
+
+</RelativeLayout>

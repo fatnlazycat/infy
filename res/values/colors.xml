@@ -1,0 +1,7 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="pink">#d81b60</color>
+    <color name="main_view_solid">#ec407a</color>
+
+</resources>

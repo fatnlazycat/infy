@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">infy</string>
+    <string name="Email_address">Email address</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="log_in">Log in</string>
+    <string name="search_hint">Search contacts and messages</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="favourites">FAVOURITES</string>
+    <string name="contacts">CONTACTS</string>
+    <string name="messages">MESSAGES</string>
+    <string name="sign_in">Don\'t have an account? Create one</string>
+    <string name="unfave">Unfave</string>
+    <string name="group">Add to group</string>
+    <string name="send_message">Send a message</string>
+    <string name="wrongPassword">Login / Password pair mismatch</string>    
+
+</resources>

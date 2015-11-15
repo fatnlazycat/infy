@@ -36,6 +36,7 @@
         <activity
             android:name=".SearchableActivity"
             android:label="@string/title_activity_searchable" 
+            android:theme="@android:style/Theme.Holo"
             android:parentActivityName="com.example.infy.MainActivity">
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />

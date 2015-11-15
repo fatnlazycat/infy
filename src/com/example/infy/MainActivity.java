@@ -1,6 +1,7 @@
 package com.example.infy;
 
 import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.SearchView;
@@ -37,6 +39,9 @@ public class MainActivity extends Activity {
 		//initializing the search activity
 		SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView=(SearchView)findViewById(R.id.searchView);
+		AutoCompleteTextView searchViewTextPart=(AutoCompleteTextView)searchView.findViewById
+				(searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
+		searchViewTextPart.setTextSize(12);
 	    // Assumes current activity is the searchable activity
 	    searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchableActivity.class)));
 	    searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
@@ -44,38 +49,10 @@ public class MainActivity extends Activity {
 	    //initializing tabs
 	    tabs=(TabHost)findViewById(android.R.id.tabhost);
 	    tabs.setup();
-	    
-	    /*LayoutInflater inflater= (LayoutInflater)LayoutInflater.from(tabs.getContext());
-		View customTab=inflater.inflate(R.layout.layout_custom_tabs, tabs, false);
-		TextView textView=(TextView)customTab.findViewById(R.id.oneOfCustomTabs);
-		textView.setText(R.string.favourites);
-		
-		TabSpec tabBuilder=tabs.newTabSpec(getString(R.string.favourites));
-		tabs.setup();
-		tabBuilder.setContent(R.id.tab1);
-		tabBuilder.setIndicator(customTab);
-		tabs.addTab(tabBuilder);*/
 		
 	    setupTab(R.id.tab1, getString(R.string.favourites));
 	    setupTab(R.id.tab2, getString(R.string.messages));
 	    setupTab(R.id.tab3, getString(R.string.contacts));
-	    
-	    /*tabs.setup();
-	    
-	    TabHost.TabSpec spec=tabs.newTabSpec("favourites");
-	    spec.setContent(R.id.tab1);
-	    spec.setIndicator(getString(R.string.favourites));
-	    tabs.addTab(spec);
-	    
-	    spec=tabs.newTabSpec("favourites");
-	    spec.setContent(R.id.tab2);
-	    spec.setIndicator(getString(R.string.messages));
-	    tabs.addTab(spec);
-	    
-	    spec=tabs.newTabSpec("favourites");
-	    spec.setContent(R.id.tab3);
-	    spec.setIndicator(getString(R.string.contacts));
-	    tabs.addTab(spec);*/
 	    
 	    tabs.setCurrentTab(0);
 	    
@@ -150,11 +127,5 @@ public class MainActivity extends Activity {
 		tabs.addTab(tabBuilder);
 	}
 	
-	/*private static View createTabView(final Context context, final String text){
-		View view=LayoutInflater.from(context).inflate(R.layout.layout_custom_tabs,null);
-		TextView textView=(TextView)view.findViewById(R.id.oneOfCustomTabs);
-		textView.setText(text);
-		return view;
-	}*/
 }
 

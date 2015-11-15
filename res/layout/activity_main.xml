@@ -7,15 +7,16 @@
     android:background="@color/main_view_solid" 
     tools:context="com.example.infy.MainActivity" >
 
-    <GridView 
-    	android:id="@+id/gridViewFavouritesReplica"
+    <GridView
+        android:id="@+id/gridViewFavouritesReplica"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:alpha="0.1"
         android:contentDescription="@string/app_name"
-        android:numColumns="2" 
-        android:alpha="0.5">        
+        android:numColumns="2" >
+        
     </GridView>
     
 
@@ -77,17 +78,31 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="15dp"
-        android:background="@android:color/white"
-        android:queryHint="@string/search_hint" >
 
-    </SearchView>
+    <LinearLayout
+        android:id="@+id/layoutForSearchView"
+      	android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+   	    android:layout_marginRight="5dp"        
+        android:layout_marginTop="15dp"
+	    android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:background="@android:color/white">
+    	
+    	<SearchView
+        	android:id="@+id/searchView"
+	        android:layout_width="270dp"
+    	    android:layout_height="wrap_content"
+    	    android:queryHint="@string/search_hint" >
+        </SearchView>
+        
+        <ImageButton
+			android:id="@+id/searchContextMenu"
+        	android:layout_width="40dp"
+        	android:layout_height="40dp"
+        	android:background="@drawable/context_button_style"
+        />			                 
+	
+	</LinearLayout>
     
 </RelativeLayout>

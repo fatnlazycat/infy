@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 		SearchView searchView=(SearchView)findViewById(R.id.searchView);
 		AutoCompleteTextView searchViewTextPart=(AutoCompleteTextView)searchView.findViewById
 				(searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
-		searchViewTextPart.setTextSize(12);
+		searchViewTextPart.setTextSize(14);
 	    // Assumes current activity is the searchable activity
 	    searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchableActivity.class)));
 	    searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default

@@ -86,13 +86,13 @@
    	    android:layout_marginRight="5dp"        
         android:layout_marginTop="15dp"
 	    android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:background="@android:color/white">
+    	android:layout_height="40dp"
+    	android:background="@drawable/search_view_background">
     	
     	<SearchView
         	android:id="@+id/searchView"
 	        android:layout_width="270dp"
-    	    android:layout_height="wrap_content"
+    	    android:layout_height="40dp"
     	    android:queryHint="@string/search_hint" >
         </SearchView>
         

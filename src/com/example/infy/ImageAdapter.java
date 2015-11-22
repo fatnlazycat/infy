@@ -19,22 +19,7 @@ public class ImageAdapter extends BaseAdapter {
 	protected static ArrayList<Contact> content;
 	
 	public static void makeContent(){
-		content = new ArrayList<Contact>();
-		Context context=MainActivity.context;
-		for (int i=0;i<15;i++) {
-			Contact c = new Contact();
-			c.name="Name "+i;
-			c.imSource="IMsource "+i;
-
-			Random rand=new Random();
-			switch (rand.nextInt(4)){
-				case 0: c.picture=ContextCompat.getDrawable(context, R.drawable.logo); break;
-				case 1: c.picture=ContextCompat.getDrawable(context, R.drawable.ic_launcher); break;
-				case 2: c.picture=ContextCompat.getDrawable(context, R.drawable.btn_rating_star_off_disabled_focused_holo_dark); break;
-				default: c.picture=ContextCompat.getDrawable(context, R.drawable.start_activity_background);					
-			}
-			content.add(c);
-		}
+		content = ContactsFactory.makeContacts();
 	}
 
 	@Override

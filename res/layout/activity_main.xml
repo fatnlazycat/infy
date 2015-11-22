@@ -19,7 +19,6 @@
         
     </GridView>
     
-
     <TabHost
         android:id="@android:id/tabhost"
         android:layout_width="match_parent"
@@ -35,14 +34,14 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="135dp" >
+                android:layout_height="135dp">
 
             </TabWidget>
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:id="@+id/tab1"
@@ -74,35 +73,44 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
+                    
+                    <ListView
+						android:id="@+id/listViewContacts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+                    </ListView>
                 </LinearLayout>
+            
             </FrameLayout>
         </LinearLayout>
     </TabHost>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layoutForSearchView"
-      	android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
-   	    android:layout_marginRight="5dp"        
+        android:layout_marginRight="5dp"
         android:layout_marginTop="15dp"
-	    android:layout_width="match_parent"
-    	android:layout_height="40dp"
-    	android:background="@drawable/search_view_background">
+        android:background="@drawable/search_view_background">
     	
     	<SearchView
-        	android:id="@+id/searchView"
-	        android:layout_width="270dp"
+    	    android:id="@+id/searchView"
+    	    android:layout_width="wrap_content"
     	    android:layout_height="40dp"
-    	    android:queryHint="@string/search_hint" >
+    	    android:layout_alignParentLeft="true">
+
         </SearchView>
         
         <ImageButton
 			android:id="@+id/searchContextMenu"
         	android:layout_width="40dp"
         	android:layout_height="40dp"
+        	android:layout_alignParentRight="true"
         	android:background="@drawable/context_button_style"
-        />			                 
+        	android:onClick="showSearchPopup"/>			                 
 	
-	</LinearLayout>
+	</RelativeLayout>
     
 </RelativeLayout>

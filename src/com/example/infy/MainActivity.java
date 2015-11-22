@@ -6,18 +6,23 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -36,12 +41,15 @@ public class MainActivity extends Activity {
 		context=this;
 		setContentView(R.layout.activity_main);
 		
+		//initializing Contacts
+		ArrayList<Contact> myContacts=ContactsFactory.makeContacts();
+		
 		//initializing the search activity
 		SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView=(SearchView)findViewById(R.id.searchView);
 		AutoCompleteTextView searchViewTextPart=(AutoCompleteTextView)searchView.findViewById
 				(searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
-		searchViewTextPart.setTextSize(14);
+		searchViewTextPart.setTextSize(12);
 	    // Assumes current activity is the searchable activity
 	    searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchableActivity.class)));
 	    searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
@@ -127,5 +135,34 @@ public class MainActivity extends Activity {
 		tabs.addTab(tabBuilder);
 	}
 	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+	    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	        View v = getCurrentFocus();
+	        if ( v instanceof EditText) {
+	            Rect outRect = new Rect();
+	            v.getGlobalVisibleRect(outRect);
+	            if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+	                v.clearFocus();
+	                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	            }
+	        }
+	    }
+	    return super.dispatchTouchEvent( event );
+	}
+	
+	public void showSearchPopup(View v) {
+	    PopupMenu popup = new PopupMenu(this, v);
+	    MenuInflater inflater = popup.getMenuInflater();
+	    inflater.inflate(R.menu.search_popup_menu, popup.getMenu());
+	    popup.show();
+	}
+	
+	public boolean onMenuItemClick(MenuItem item) {
+	    	
+	        return false;
+	    }
+
 }
 

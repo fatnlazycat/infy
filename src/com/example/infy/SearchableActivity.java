@@ -14,7 +14,7 @@ public class SearchableActivity extends ListActivity {
 		Intent intent=getIntent();
 		if (intent.ACTION_SEARCH.equals(intent.getAction())){
 			String query=intent.getStringExtra(SearchManager.QUERY);
-			for (int i=0; i<ImageAdapter.content.size(); i++){
+			for (int i=0; i<FavouritesAdapter.content.size(); i++){
 				
 			}
 		}

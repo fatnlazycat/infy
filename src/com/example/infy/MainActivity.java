@@ -22,9 +22,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
@@ -33,7 +35,10 @@ public class MainActivity extends Activity {
 	public static Context context;
 	GridView gridViewFavourites;
 	GridView gridViewFavouritesReplica;
+	ListView listViewContacts;
 	TabHost tabs;
+	FavouritesAdapter favouritesAdapter;
+	ContactsAdapter contactsAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,14 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		//initializing Contacts
-		ArrayList<Contact> myContacts=ContactsFactory.makeContacts();
+		//ArrayList<Contact> myContacts=ContactsFactory.makeContacts();
+		ContactsAdapter.makeContent();
+		listViewContacts=(ListView)findViewById(R.id.listViewContacts);
+		contactsAdapter=new ContactsAdapter();
+		contactsAdapter.isBuilt=false;
 		
-		//initializing the search activity
+		
+		//initializing the search view
 		SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView=(SearchView)findViewById(R.id.searchView);
 		AutoCompleteTextView searchViewTextPart=(AutoCompleteTextView)searchView.findViewById
@@ -64,16 +74,32 @@ public class MainActivity extends Activity {
 	    
 	    tabs.setCurrentTab(0);
 	    
+	    tabs.setOnTabChangedListener(new OnTabChangeListener(){
+			@Override
+			public void onTabChanged(String tabId) {
+				switch (tabs.getCurrentTab()){
+					case 0: break; //we build favourites tab in MainActivity.onCreate -> do nothing
+					case 1: break; //implement when messages tab is created
+					case 2: if (!contactsAdapter.isBuilt) {
+						listViewContacts.setAdapter(contactsAdapter);
+						contactsAdapter.isBuilt=true;
+					}
+				}
+			}
+	    });
+	    
 	    //initiating & populating the favourites grid view (& replica too)
 	    gridViewFavourites=(GridView)findViewById(R.id.gridViewFavourites);
 	    gridViewFavouritesReplica=(GridView)findViewById(R.id.gridViewFavouritesReplica);
 	    	//here we create initial content for both grid view & replica
-	    ImageAdapter.makeContent();
-	    ReplicaFavouritesImageAdapter.content=new ArrayList<Contact>();
-	    ReplicaFavouritesImageAdapter.content.add(ImageAdapter.content.get(0));
-	    ReplicaFavouritesImageAdapter.content.add(ImageAdapter.content.get(1));
-	    gridViewFavourites.setAdapter(new ImageAdapter());
-	    gridViewFavouritesReplica.setAdapter(new ReplicaFavouritesImageAdapter());
+	    FavouritesAdapter.makeContent();
+	    ReplicaFavouritesAdapter.content=new ArrayList<Contact>();
+	    ReplicaFavouritesAdapter.content.add(FavouritesAdapter.content.get(0));
+	    ReplicaFavouritesAdapter.content.add(FavouritesAdapter.content.get(1));
+	    favouritesAdapter=new FavouritesAdapter();
+	    gridViewFavourites.setAdapter(favouritesAdapter);
+	    favouritesAdapter.isBuilt=true;
+	    gridViewFavouritesReplica.setAdapter(new ReplicaFavouritesAdapter());
 
 	    registerForContextMenu(gridViewFavourites);	    
 	    gridViewFavourites.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -87,8 +113,8 @@ public class MainActivity extends Activity {
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				int pos=firstVisibleItem+visibleItemCount-1;
 				if (!(pos>=1 && pos<=totalItemCount)) pos=1;
-			    ReplicaFavouritesImageAdapter.content.set(0, ImageAdapter.content.get(pos-1));
-			    ReplicaFavouritesImageAdapter.content.set(1, ImageAdapter.content.get(pos));
+			    ReplicaFavouritesAdapter.content.set(0, FavouritesAdapter.content.get(pos-1));
+			    ReplicaFavouritesAdapter.content.set(1, FavouritesAdapter.content.get(pos));
 			    ((BaseAdapter) gridViewFavouritesReplica.getAdapter()).notifyDataSetChanged();
 			}
 		});
@@ -109,7 +135,7 @@ public class MainActivity extends Activity {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()){
 		case R.id.itemUnfave: {
-			ImageAdapter.content.remove(info.position);
+			FavouritesAdapter.content.remove(info.position);
 			((BaseAdapter) gridViewFavourites.getAdapter()).notifyDataSetChanged();
 			return true;
 		}

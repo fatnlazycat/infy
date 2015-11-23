@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 
-public class ReplicaFavouritesImageAdapter extends BaseAdapter {
+public class ReplicaFavouritesAdapter extends BaseAdapter {
 	protected static ArrayList<Contact> content;
 
 	@Override

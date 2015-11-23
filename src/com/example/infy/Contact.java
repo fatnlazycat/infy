@@ -10,6 +10,7 @@ public class Contact {
 	String name;
 	String imSource;
 	Drawable picture;
+	int drawableId;
 }
 
 class ContactsFactory {
@@ -26,8 +27,9 @@ class ContactsFactory {
 		for (int i=0; i<len; i++){
 			Contact c=new Contact();
 			c.name=names[i];
-			c.picture=ContextCompat.getDrawable(context, context.getResources().
-					getIdentifier(pictures[i],"drawable",context.getPackageName()));
+			c.drawableId=context.getResources().getIdentifier(pictures[i],"drawable",
+					context.getPackageName());
+			c.picture=ContextCompat.getDrawable(context, c.drawableId);
 			c.imSource="IMsource "+i;
 			myContacts.add(c);
 		}

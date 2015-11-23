@@ -1,22 +1,20 @@
 package com.example.infy;
+
 import java.util.ArrayList;
-import java.util.Random;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-public class ImageAdapter extends BaseAdapter {
+public class ContactsAdapter extends BaseAdapter {
 	protected static ArrayList<Contact> content;
+	boolean isBuilt;
 	
 	public static void makeContent(){
 		content = ContactsFactory.makeContacts();
@@ -39,17 +37,23 @@ public class ImageAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		//Context context=parent.getContext();
 		LayoutInflater inflater = (LayoutInflater) LayoutInflater.from(parent.getContext());
 		if (convertView==null){
-			convertView=inflater.inflate(R.layout.favourites_item, parent, false);
+			convertView=inflater.inflate(R.layout.contacts_item, parent, false);
 		}
 		
-		RelativeLayout layout=(RelativeLayout)convertView.findViewById(R.id.favourites_view_layout);
-		layout.setBackground(content.get(position).picture);
-		TextView favouritesName=(TextView)convertView.findViewById(R.id.favourites_name);
-		favouritesName.setText(content.get(position).name);
-		TextView favouritesIM=(TextView)convertView.findViewById(R.id.favourites_im);
-		favouritesIM.setText(content.get(position).imSource);
+		/*here we can set the background
+		 * LinearLayout layout=(LinearLayout)convertView.findViewById(R.id.contactsLayout);
+		layout.setBackground(content.get(position).picture);*/
+		
+		TextView firstLetter=(TextView)convertView.findViewById(R.id.firstLetter);
+		//firstLetter.setText(content.get(position).name.charAt(0));
+		ImageView smallContactPicture=(ImageView)convertView.findViewById(R.id.smallContactPicture);
+		smallContactPicture.setImageResource(content.get(position).drawableId);
+		TextView contactName=(TextView)convertView.findViewById(R.id.contactName);
+		contactName.setText(content.get(position).name);
+		
 		
 		return convertView;
 	}

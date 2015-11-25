@@ -47,11 +47,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		//initializing Contacts
-		//ArrayList<Contact> myContacts=ContactsFactory.makeContacts();
 		ContactsAdapter.makeContent();
 		listViewContacts=(ListView)findViewById(R.id.listViewContacts);
 		contactsAdapter=new ContactsAdapter();
-		contactsAdapter.isBuilt=false;
+		contactsAdapter.isBuilt=false; //we didn't show contacts tab yet
 		
 		
 		//initializing the search view
@@ -101,16 +100,17 @@ public class MainActivity extends Activity {
 	    favouritesAdapter.isBuilt=true;
 	    gridViewFavouritesReplica.setAdapter(new ReplicaFavouritesAdapter());
 
+	    //initialize context menu in each grid item
 	    registerForContextMenu(gridViewFavourites);	    
+	    
 	    gridViewFavourites.setOnScrollListener(new AbsListView.OnScrollListener() {
-			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// TODO Auto-generated method stub
 			}
-			
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				//if favourites view is scrolled, we change replica view accordingly
 				int pos=firstVisibleItem+visibleItemCount-1;
 				if (!(pos>=1 && pos<=totalItemCount)) pos=1;
 			    ReplicaFavouritesAdapter.content.set(0, FavouritesAdapter.content.get(pos-1));
@@ -120,16 +120,28 @@ public class MainActivity extends Activity {
 		});
 	}
 
+	/*
+	 * other MainActivity methods
+	 */
+	
+	//context menu in favourites tab
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.favourites_context_menu, menu);
 	}
 	
+	//this is called on context menu button press - in favourites tab
 	public void showFavouritesContextMenu(View v){
 	    this.openContextMenu(v);
 	}
 
+	//this is called on context menu button press - in contacts tab
+	public void showContactsContextMenu(View v){
+	    this.openContextMenu(v);
+	}
+	
+	//context menu item selected
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -147,6 +159,7 @@ public class MainActivity extends Activity {
 		return false;
 	}
 	
+	//called from MainActivity.onCreate to set the tabs
 	private void setupTab(final int contentViewId, String tag){
 		LayoutInflater inflater= (LayoutInflater)LayoutInflater.from(tabs.getContext());
 		View customTab=inflater.inflate(R.layout.layout_custom_tabs, null, false);
@@ -161,6 +174,7 @@ public class MainActivity extends Activity {
 		tabs.addTab(tabBuilder);
 	}
 	
+	//hides the software keyboard
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
 	    if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -178,6 +192,7 @@ public class MainActivity extends Activity {
 	    return super.dispatchTouchEvent( event );
 	}
 	
+	//popup menu for the search view
 	public void showSearchPopup(View v) {
 	    PopupMenu popup = new PopupMenu(this, v);
 	    MenuInflater inflater = popup.getMenuInflater();
@@ -185,6 +200,7 @@ public class MainActivity extends Activity {
 	    popup.show();
 	}
 	
+	//popup menu for the search view - onClick
 	public boolean onMenuItemClick(MenuItem item) {
 	    	
 	        return false;

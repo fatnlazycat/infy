@@ -1,18 +1,30 @@
 package com.example.infy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
-public class Contact {
+public class Contact implements Comparable<Contact>{
 	String name;
 	String imSource;
 	Drawable picture;
 	int drawableId;
+	
+	@Override
+	public String toString(){
+		return name;
+	}
+
+	@Override
+	public int compareTo(Contact another) { //we need it sort the contacts list
+		return this.name.compareTo(another.name);
+	}
 }
 
+//a class with the single method makeContacts to initialize the appropriate contacts data
 class ContactsFactory {
 	
 	static ArrayList<Contact> makeContacts(){
@@ -33,6 +45,7 @@ class ContactsFactory {
 			c.imSource="IMsource "+i;
 			myContacts.add(c);
 		}
+		Collections.sort(myContacts);
 		return myContacts;
 	}
 	

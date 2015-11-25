@@ -50,7 +50,9 @@ public class ContactsAdapter extends BaseAdapter {
 		TextView firstLetter=(TextView)convertView.findViewById(R.id.firstLetter);
 		//firstLetter.setText(content.get(position).name.charAt(0));
 		ImageView smallContactPicture=(ImageView)convertView.findViewById(R.id.smallContactPicture);
-		smallContactPicture.setImageResource(content.get(position).drawableId);
+		smallContactPicture.setBackground(content.get(position).picture);
+		smallContactPicture.setImageResource(R.drawable.my_oval);
+
 		TextView contactName=(TextView)convertView.findViewById(R.id.contactName);
 		contactName.setText(content.get(position).name);
 		

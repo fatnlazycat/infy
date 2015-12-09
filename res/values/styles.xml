@@ -20,8 +20,8 @@
     </style>
 
     <style name="PopupMenu">
-		<item name="android:textColor">#FF01F0</item>
-		<item name="android:textSize">10sp</item>
+		<item name="android:textColor">@color/main_view_solid</item>
+		<item name="android:textSize">1sp</item>
 	</style>
 
 

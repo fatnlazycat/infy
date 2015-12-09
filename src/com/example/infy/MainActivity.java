@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,20 +39,15 @@ public class MainActivity extends Activity {
 	ListView listViewContacts;
 	TabHost tabs;
 	FavouritesAdapter favouritesAdapter;
+	ReplicaFavouritesAdapter replicaFavouritesAdapter;
 	ContactsAdapter contactsAdapter;
+	boolean dataSetChanged;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context=this;
 		setContentView(R.layout.activity_main);
-		
-		//initializing Contacts
-		ContactsAdapter.makeContent();
-		listViewContacts=(ListView)findViewById(R.id.listViewContacts);
-		contactsAdapter=new ContactsAdapter();
-		contactsAdapter.isBuilt=false; //we didn't show contacts tab yet
-		
 		
 		//initializing the search view
 		SearchManager searchManager=(SearchManager)getSystemService(Context.SEARCH_SERVICE);
@@ -67,9 +63,9 @@ public class MainActivity extends Activity {
 	    tabs=(TabHost)findViewById(android.R.id.tabhost);
 	    tabs.setup();
 		
-	    setupTab(R.id.tab1, getString(R.string.favourites));
+	    setupTab(R.id.tab3, getString(R.string.favourites));
 	    setupTab(R.id.tab2, getString(R.string.messages));
-	    setupTab(R.id.tab3, getString(R.string.contacts));
+	    setupTab(R.id.tab1, getString(R.string.contacts));
 	    
 	    tabs.setCurrentTab(0);
 	    
@@ -77,31 +73,57 @@ public class MainActivity extends Activity {
 			@Override
 			public void onTabChanged(String tabId) {
 				switch (tabs.getCurrentTab()){
-					case 0: break; //we build favourites tab in MainActivity.onCreate -> do nothing
-					case 1: break; //implement when messages tab is created
-					case 2: if (!contactsAdapter.isBuilt) {
+					case 0: {
+						gridViewFavourites.setAdapter(favouritesAdapter);
+						gridViewFavouritesReplica.setAdapter(replicaFavouritesAdapter);
+						if (dataSetChanged) {
+							FavouritesAdapter.makeContent();
+							((BaseAdapter) favouritesAdapter).notifyDataSetChanged();
+							dataSetChanged=false;
+						}
+						break;
+					}
+					case 1: {
+						gridViewFavouritesReplica.setAdapter(replicaFavouritesAdapter);
+						break; //implement when messages tab is created
+					}
+					case 2: {
+						contactsAdapter=new ContactsAdapter();
 						listViewContacts.setAdapter(contactsAdapter);
-						contactsAdapter.isBuilt=true;
 					}
 				}
 			}
 	    });
 	    
+		//initializing Contacts
 	    //initiating & populating the favourites grid view (& replica too)
+    	//here we create initial content for both grid view & replica
+
+	    ContactsAdapter.makeContent();
+		FavouritesAdapter.makeContent();
+		
+		listViewContacts=(ListView)findViewById(R.id.listViewContacts);
 	    gridViewFavourites=(GridView)findViewById(R.id.gridViewFavourites);
-	    gridViewFavouritesReplica=(GridView)findViewById(R.id.gridViewFavouritesReplica);
-	    	//here we create initial content for both grid view & replica
-	    FavouritesAdapter.makeContent();
-	    ReplicaFavouritesAdapter.content=new ArrayList<Contact>();
-	    ReplicaFavouritesAdapter.content.add(FavouritesAdapter.content.get(0));
-	    ReplicaFavouritesAdapter.content.add(FavouritesAdapter.content.get(1));
 	    favouritesAdapter=new FavouritesAdapter();
+	    gridViewFavouritesReplica=(GridView)findViewById(R.id.gridViewFavouritesReplica);
+	    
+	    ReplicaFavouritesAdapter.content=new ArrayList<Contact>();
+	    if (!(FavouritesAdapter.content.get(0)==null)) {
+	    	ReplicaFavouritesAdapter.content.add(FavouritesAdapter.content.get(0));
+	    	if (!(FavouritesAdapter.content.get(1)==null)) {
+	    		ReplicaFavouritesAdapter.content.add(FavouritesAdapter.content.get(1));
+	    	}
+	    }
+
 	    gridViewFavourites.setAdapter(favouritesAdapter);
-	    favouritesAdapter.isBuilt=true;
-	    gridViewFavouritesReplica.setAdapter(new ReplicaFavouritesAdapter());
+
+	    replicaFavouritesAdapter=new ReplicaFavouritesAdapter();
+	    gridViewFavouritesReplica.setAdapter(replicaFavouritesAdapter);
 
 	    //initialize context menu in each grid item
-	    registerForContextMenu(gridViewFavourites);	    
+	    registerForContextMenu(gridViewFavourites);
+	    registerForContextMenu(listViewContacts);
+
 	    
 	    gridViewFavourites.setOnScrollListener(new AbsListView.OnScrollListener() {
 			@Override
@@ -111,11 +133,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				//if favourites view is scrolled, we change replica view accordingly
-				int pos=firstVisibleItem+visibleItemCount-1;
-				if (!(pos>=1 && pos<=totalItemCount)) pos=1;
-			    ReplicaFavouritesAdapter.content.set(0, FavouritesAdapter.content.get(pos-1));
-			    ReplicaFavouritesAdapter.content.set(1, FavouritesAdapter.content.get(pos));
-			    ((BaseAdapter) gridViewFavouritesReplica.getAdapter()).notifyDataSetChanged();
+				refreshFavouritesReplica(firstVisibleItem, visibleItemCount);
 			}
 		});
 	}
@@ -128,7 +146,12 @@ public class MainActivity extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.favourites_context_menu, menu);
+		int menuResource=0;
+		switch (v.getId()){
+		case R.id.gridViewFavourites: menuResource=R.menu.favourites_context_menu; break;
+		case R.id.listViewContacts: menuResource=R.menu.contacts_context_menu; break;
+		}
+		inflater.inflate(menuResource, menu);
 	}
 	
 	//this is called on context menu button press - in favourites tab
@@ -146,13 +169,38 @@ public class MainActivity extends Activity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()){
+		//favourites tab context menu
 		case R.id.itemUnfave: {
-			FavouritesAdapter.content.remove(info.position);
+			Contact c=FavouritesAdapter.content.get(info.position);
+			ContactsAdapter.content.get(ContactsAdapter.content.indexOf(c)).inFavourites=false;
+			FavouritesAdapter.content.remove(c);
 			((BaseAdapter) gridViewFavourites.getAdapter()).notifyDataSetChanged();
+			int begin=gridViewFavourites.getFirstVisiblePosition();
+			int end=gridViewFavourites.getLastVisiblePosition();
+			int visibleItemCount=end-begin;
+			if (begin<favouritesAdapter.getCount()-visibleItemCount) visibleItemCount++;
+			refreshFavouritesReplica(begin, visibleItemCount);
 			return true;
+		}
+		case R.id.itemGroup: {
+			return true; //not implemented here
 		}
 		case R.id.itemSendMessage: {
 			tabs.setCurrentTab(1);
+			return true;
+		}
+		//contacts tab context menu
+		case R.id.itemFave: {
+			final int pos=info.position;
+			ContactsAdapter.content.get(pos).inFavourites=true;
+			dataSetChanged=true;
+			return true;
+		}
+		case R.id.itemDelete: {
+			final int pos=info.position;
+			ContactsAdapter.content.remove(pos);
+			((BaseAdapter) contactsAdapter).notifyDataSetChanged();
+			dataSetChanged=true;
 			return true;
 		}
 		}
@@ -194,7 +242,7 @@ public class MainActivity extends Activity {
 	
 	//popup menu for the search view
 	public void showSearchPopup(View v) {
-	    PopupMenu popup = new PopupMenu(this, v);
+	    PopupMenu popup = new PopupMenu(this, v, Gravity.NO_GRAVITY, 0, R.style.PopupMenu);
 	    MenuInflater inflater = popup.getMenuInflater();
 	    inflater.inflate(R.menu.search_popup_menu, popup.getMenu());
 	    popup.show();
@@ -205,6 +253,21 @@ public class MainActivity extends Activity {
 	    	
 	        return false;
 	    }
-
+	
+	private void refreshFavouritesReplica(int firstVisibleItem, int visibleItemCount){
+		int pos=firstVisibleItem+visibleItemCount-1;
+		int pos2;
+		if (pos>=0){
+			if (pos==0) pos2=pos;	else pos2=pos-1;
+			ReplicaFavouritesAdapter.content.set(0, FavouritesAdapter.content.get(pos2));
+			ReplicaFavouritesAdapter.content.set(1, FavouritesAdapter.content.get(pos));
+		} else {
+			Contact c=new Contact();
+			ReplicaFavouritesAdapter.content.set(0, c);
+			ReplicaFavouritesAdapter.content.set(1, c);
+		}
+		replicaFavouritesAdapter.notifyDataSetChanged();
+	}
+	
 }
 

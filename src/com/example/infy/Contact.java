@@ -12,6 +12,7 @@ public class Contact implements Comparable<Contact>{
 	String imSource;
 	Drawable picture;
 	int drawableId;
+	boolean inFavourites;
 	
 	@Override
 	public String toString(){
@@ -43,6 +44,7 @@ class ContactsFactory {
 					context.getPackageName());
 			c.picture=ContextCompat.getDrawable(context, c.drawableId);
 			c.imSource="IMsource "+i;
+			c.inFavourites=true;
 			myContacts.add(c);
 		}
 		Collections.sort(myContacts);

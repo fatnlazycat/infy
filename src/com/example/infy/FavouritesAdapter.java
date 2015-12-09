@@ -1,16 +1,9 @@
 package com.example.infy;
 import java.util.ArrayList;
-import java.util.Random;
-
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,7 +13,13 @@ public class FavouritesAdapter extends BaseAdapter {
 	boolean isBuilt;
 	
 	public static void makeContent(){
-		content = ContactsFactory.makeContacts();
+		content=new ArrayList<Contact>();
+		Contact c;
+		int size=ContactsAdapter.content.size();
+		for (int i=0; i<size; i++){
+			c=ContactsAdapter.content.get(i);
+			if (c.inFavourites) content.add(c);
+		}
 	}
 
 	@Override

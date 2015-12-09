@@ -2,14 +2,11 @@ package com.example.infy;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ContactsAdapter extends BaseAdapter {
@@ -37,8 +34,9 @@ public class ContactsAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		//Context context=parent.getContext();
 		LayoutInflater inflater = (LayoutInflater) LayoutInflater.from(parent.getContext());
+		/* We need this check because layout inflater is required for previously not visible views.
+		 * If the view is visible already it isn't null.*/
 		if (convertView==null){
 			convertView=inflater.inflate(R.layout.contacts_item, parent, false);
 		}
